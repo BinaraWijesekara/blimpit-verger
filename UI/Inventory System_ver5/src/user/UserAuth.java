@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package user;
 
 import controller.ApiConnector;
@@ -23,18 +18,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-/**
- *
- * @author Tharusha
- */
+
 public class UserAuth extends javax.swing.JFrame {
 
     private int row;
     private int colum;
 
-    /**
-     * Creates new form mouseHover
-     */
     public UserAuth(int row, int colum) {
         this.row = row;
         this.colum = colum;
@@ -58,8 +47,7 @@ public class UserAuth extends javax.swing.JFrame {
     public void loadDetails(String name, String userName, String desig) {
 
         String msg = "Name: " + name + "\n UserName: " + userName + "\n Designation :" + desig;
-        //JOptionPane.showMessageDialog(null,msg);
-
+        
         lblname.setText(name);
         lbluserName.setText(userName);
         lblDesignation.setText(desig);
@@ -101,11 +89,7 @@ public class UserAuth extends javax.swing.JFrame {
     private static void lookandfeels() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-                javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(UserReg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -426,7 +410,7 @@ public class UserAuth extends javax.swing.JFrame {
         jsonobjectUser.put("name",Name);
           System.out.println("JasonObject = "+jsonobjectUser);
        client.sendData("http://localhost:8080/api/usrmgtservice/update", jsonobjectUser);
-//        
+       
         DefaultTableModel model = (DefaultTableModel) tabfeatures.getModel();
         JSONArray jsonArray = new JSONArray();
         JSONArray jsonArray2 = new JSONArray();
@@ -442,17 +426,14 @@ public class UserAuth extends javax.swing.JFrame {
                 
                 jsonobjectFEATURES2.put("featureName",feature);
                 jsonobjectFEATURES2.put("featureId", featureID);
- //               System.out.println("jsonObject = "+jsonobjectFEATURES2);
                 
                 jsonArray2.add(jsonobjectFEATURES2);
-   //             System.out.println("JasonArray = "+jsonArray2);
                 
                 jsonobjectFEATURES.put("username", uname);
                 jsonobjectFEATURES.put("features",jsonArray2);
                 System.out.println("JasonObject = "+jsonobjectFEATURES);
                 
                 client.sendData("http://localhost:8080/api/usrmgtservice/addfeatures", jsonobjectFEATURES);
-       //         System.out.println(i+1+" for loop complte !");
                 
                 jsonobjectFEATURES2.clear();
                 jsonobjectFEATURES.clear();
@@ -464,6 +445,8 @@ public class UserAuth extends javax.swing.JFrame {
         us.loadpendinguser();
         us.loaduserinfo();
             
+        UserManager usermanager = new UserManager();
+        usermanager.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -475,6 +458,7 @@ public class UserAuth extends javax.swing.JFrame {
                 String uname = lbluserName.getText().toString();
                 ApiConnector apihandler = new ApiConnector();
                 apihandler.delete("http://localhost:8080/api/usrmgtservice/removeUsers/" + uname);
+                apihandler.delete("http://localhost:8080/api/usrmgtservice/removeusersfeatures/"+uname);
                 UserManager userMang = new UserManager();
                 userMang.setVisible(true);
                 this.dispose();

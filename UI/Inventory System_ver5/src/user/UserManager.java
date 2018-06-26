@@ -414,8 +414,9 @@ public class UserManager extends javax.swing.JFrame {
         colum = tabuserInfo.getColumnCount();
 
         UserVeiwe uv = new UserVeiwe();
-
         uv.setVisible(true);
+        
+        uv.loadDesignation();
 //                     ......................Name........................../......................Username......................./........................Designation................../......................Authorization....................                      
         uv.loadDetails(tabuserInfo.getModel().getValueAt(row, 0).toString(), tabuserInfo.getModel().getValueAt(row, 1).toString(), tabuserInfo.getModel().getValueAt(row, 2).toString(), tabuserInfo.getModel().getValueAt(row, 3).toString());
         this.setVisible(false);

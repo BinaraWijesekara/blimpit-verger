@@ -8,16 +8,13 @@ import org.blimpit.utils.connectors.ConnectorException;
 import org.blimpit.utils.connectors.mysql.MySQLConnector;
 import org.blimpit.utils.connectors.mysql.Record;
 import org.blimpit.utils.usermanagement.Constants;
-import org.blimpit.utils.usermanagement.model.Credential;
+import org.blimpit.utils.usermanagement.model.*;
 import org.blimpit.utils.usermanagement.model.Feature;
 import org.blimpit.utils.usermanagement.model.ResponseStatus;
-import org.blimpit.utils.usermanagement.model.User;
 
 
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-//import javax.ws.rs.core.Response;
 import java.util.*;
 
 public class UserControl {
@@ -36,6 +33,8 @@ public class UserControl {
     private String dbpassword;
     private String tablename;
     private String tablenameLog;
+    private String tablenameDesignation;
+    private String tablenameUserFeatures;
 
     private Connector connector;
 
@@ -49,6 +48,9 @@ public class UserControl {
         this.dbpassword = applicationProperties.getValue("db.password");
         this.tablename = applicationProperties.getValue("db.mgt.users");
         this.tablenameLog=applicationProperties.getValue("db.log.details.table");
+        this.tablenameDesignation=applicationProperties.getValue("db.user.designation");
+        this.tablenameUserFeatures=applicationProperties.getValue("db.feature.user.mapper");
+
 
         try{
             mySQLConnector = (MySQLConnector)MySQLConnector.getInstance(this.host,this.port,this.db,this.dbusername,this.dbpassword);
@@ -76,6 +78,21 @@ public class UserControl {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Not Deleted").build();
             }
         }
+
+    public Response removeUserFeatures(String username){
+
+        boolean delete = false;
+        try {
+            delete = mySQLConnector.delete(this.tablenameUserFeatures,"u_id",username);
+        }catch (ConnectorException e){
+            e.printStackTrace();
+        }
+        if (delete){
+            return Response.ok("{\"msg\":\"Entry deleted\"}",MediaType.APPLICATION_JSON).build();
+        }else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Not Deleted").build();
+        }
+    }
 
     public List<Log> getLogCount(){
         List<Log> log_count = new ArrayList<Log>();
@@ -206,4 +223,7 @@ public class UserControl {
         }
         return (User[])userMap.toArray(new User[userMap.size()]);
     }
+
+
+
 }

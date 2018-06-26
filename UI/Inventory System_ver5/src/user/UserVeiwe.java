@@ -1,6 +1,7 @@
 package user;
 
 import controller.ApiConnector;
+import controller.Client;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.Vector;
@@ -22,45 +23,85 @@ public class UserVeiwe extends javax.swing.JFrame {
         lookandfeels();
         initComponents();
         lookandfeels();
+        loadFeatures();
         ImageIcon icon = new ImageIcon("Image/icon.png");
         setIconImage(icon.getImage());
 
-//        jTable1.getModel().setValueAt(false, 0, 0);
-//        jTable1.getModel().setValueAt(false, 1, 0);
-//        jTable1.getModel().setValueAt(false, 2, 0);
-//        jTable1.getModel().setValueAt(false, 3, 0);
-        txtCFun();
+        
     }
     public void loadFeatures()
-    {
-     ApiConnector apiConnector = new ApiConnector();
+    {ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/usrmgtservice/features");
+        
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        
+        int arrayLength = 0;
+        Vector row;
 
+        try {
+            jsonArray = (JSONArray) parser.parse(get);
+            arrayLength = jsonArray.size();
+            JSONObject jsonobj = new JSONObject();
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+            for (int i = 0; i < arrayLength; i++) {
+                row = new Vector();
+                jsonobj = (JSONObject) jsonArray.get(i);
+                                                
+                row.add(0,false);
+                row.add(1,jsonobj.get("featureId").toString());
+                row.add(2,jsonobj.get("featureName").toString());
+                model.addRow(row);
+
+            }
+
+        } catch (ParseException ex) {
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void loadDesignation(){
+        ApiConnector apiConnector = new ApiConnector();
+        String get = apiConnector.get("http://localhost:8080/api/usrmgtservice/designations");
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        int arrayLength = 0;
+        
+        try{
+            jsonArray = (JSONArray) parser.parse(get);
+            arrayLength = jsonArray.size();
+            JSONObject jsonObject = new JSONObject();
+            
+            for( int i = 0 ; i < arrayLength ; i++){
+                jsonObject = (JSONObject) jsonArray.get(i);
+                ComboBox_Designation.addItem(jsonObject.get("name").toString());
+                
+            }
+            
+        }catch(ParseException ex){
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     public void loadDetails(String name, String username, String designation, String logfile) {
 
+               
         lblName.setText(name);
         lblUserName.setText(username);
-        txtDesig.setText(designation);
+        ComboBox_Designation.setSelectedItem(designation);
         JSONParser parser = new JSONParser();
-        JSONArray featureJsonArray = null;
         JSONArray userFeatureJsonArray = null;
 
         ApiConnector apiConnector = new ApiConnector();
         String UsersFeatures = apiConnector.get("http://localhost:8080/api/usrmgtservice/getusersfeatures/" + username);
-        String Features = apiConnector.get("http://localhost:8080/api/usrmgtservice/features/");
-
-        int featureArrayLength = 0;
+        
         int userFeatureArrayLength = 0;
-        Vector row = new Vector();
-
         try {
-            featureJsonArray = (JSONArray) parser.parse(Features);
+            
             userFeatureJsonArray = (JSONArray) parser.parse(UsersFeatures);
-
-            featureArrayLength = featureJsonArray.size();
             userFeatureArrayLength = userFeatureJsonArray.size();
-            JSONObject featureJsonobject = new JSONObject();
             JSONObject userFeatureJasonObject = new JSONObject();
 
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -68,24 +109,13 @@ public class UserVeiwe extends javax.swing.JFrame {
             for (int j = 0; j < userFeatureArrayLength; j++) {
                 userFeatureJasonObject = (JSONObject) userFeatureJsonArray.get(j);
                 String userValue = (String) userFeatureJasonObject.get("featureName");
-                System.out.println("User = " + userValue);
-
-                for (int a = 0; a < featureArrayLength; a++) {
-                    featureJsonobject = (JSONObject) featureJsonArray.get(a);
-                    String featureValue = (String) featureJsonobject.get("featureName");
-                    System.out.println("Feature = " + featureValue);
-
-                    if (userValue.equals(featureValue)) {
-                        row = new Vector();
-                        row.add(0, true);
-                        row.add(1, featureJsonobject.get("featureName").toString());
-                        model.addRow(row);
-                    }else{
-                        row = new Vector();
-                        row.add(0, false);
-                        row.add(1, featureJsonobject.get("featureName").toString());
-                        model.addRow(row);
-                    } 
+                
+                int featureLength = model.getRowCount();
+                for (int a = 0; a < featureLength; a++) {
+                    String featureValue = model.getValueAt(a,2).toString();
+                   if (userValue.equals(featureValue)) {
+                        model.setValueAt(true,a,0);
+                    }
                     
                 }
                   
@@ -129,7 +159,7 @@ public class UserVeiwe extends javax.swing.JFrame {
         btnOk = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtDesig = new javax.swing.JTextField();
+        ComboBox_Designation = new javax.swing.JComboBox<>();
 
         jLabel3.setText("jLabel3");
 
@@ -234,14 +264,14 @@ public class UserVeiwe extends javax.swing.JFrame {
 
             },
             new String [] {
-                "", "Features"
+                "", "Feature ID", "Features"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false
+                true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -351,18 +381,18 @@ public class UserVeiwe extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtDesig, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(ComboBox_Designation, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(4, 4, 4)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDesig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(ComboBox_Designation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
@@ -397,13 +427,15 @@ public class UserVeiwe extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
@@ -422,12 +454,68 @@ public class UserVeiwe extends javax.swing.JFrame {
     int editstate = 1;
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-
+        String Name = lblName.getText();
+        String UserName = lblUserName.getText();
+        String Designation = ComboBox_Designation.getSelectedItem().toString();
+        
+        JSONObject jsonobjectFEATURES = new JSONObject();
+        JSONObject jsonobjectFEATURES2 = new JSONObject();
+        JSONObject jsonobjectUser = new JSONObject();
+        
+        Client client = new Client();
+        ApiConnector apihandler = new ApiConnector();
+        
+        jsonobjectUser.put("username",UserName);
+        jsonobjectUser.put("name", Name);
+        jsonobjectUser.put("designation",Designation);
+        jsonobjectUser.put("registrationStatus", "Accepted");
+        System.out.println("JasonObject = "+jsonobjectUser);
+        client.sendData("http://localhost:8080/api/usrmgtservice/update", jsonobjectUser);
+        apihandler.delete("http://localhost:8080/api/usrmgtservice/removeusersfeatures/"+UserName);
+        
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray2 = new JSONArray();
+        String feature;
+        String featureID;
+        int i=0;
+        for(i=0;i<model.getRowCount();i++)
+        {
+            Boolean isChecked = Boolean.valueOf(model.getValueAt(i,0).toString());
+            if(isChecked){
+                feature = model.getValueAt(i,2).toString();
+                featureID=model.getValueAt(i,1).toString();
+                
+                jsonobjectFEATURES2.put("featureName",feature);
+                jsonobjectFEATURES2.put("featureId", featureID);
+                
+                jsonArray2.add(jsonobjectFEATURES2);
+                
+                jsonobjectFEATURES.put("username", UserName);
+                jsonobjectFEATURES.put("features",jsonArray2);
+                System.out.println("JasonObject = "+jsonobjectFEATURES);
+                
+                client.sendData("http://localhost:8080/api/usrmgtservice/addfeatures", jsonobjectFEATURES);
+                
+                jsonobjectFEATURES2.clear();
+                jsonobjectFEATURES.clear();
+                jsonArray2.clear();
+            }
+            
+        }
+        UserManager us =new UserManager();
+        us.loadpendinguser();
+        us.loaduserinfo();
+            
+        UserManager usermanager = new UserManager();
+        usermanager.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-
-       this.dispose();
+        UserManager usermanager = new UserManager();
+        usermanager.setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -442,6 +530,7 @@ public class UserVeiwe extends javax.swing.JFrame {
             String uname = lblUserName.getText().toString();
             ApiConnector apihandler = new ApiConnector();
             apihandler.delete("http://localhost:8080/api/usrmgtservice/removeUsers/" + uname);
+            apihandler.delete("http://localhost:8080/api/usrmgtservice/removeusersfeatures/"+uname);
             UserManager userMang = new UserManager();
             userMang.setVisible(true);
             this.dispose();
@@ -452,10 +541,6 @@ public class UserVeiwe extends javax.swing.JFrame {
     private static void lookandfeels() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
                 javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
             }
         } catch (ClassNotFoundException ex) {
@@ -491,27 +576,9 @@ public class UserVeiwe extends javax.swing.JFrame {
 
     }
 
-    private void txtCFun() {
-
-//        txtNAoUser.setEditable(false);
-//        txtNAoUser.setBackground(Color.LIGHT_GRAY);
-//        txtUserNa.setEditable(false);
-//        txtUserNa.setBackground(Color.LIGHT_GRAY);
-//        txtDesig.setEditable(false);
-//        txtDesig.setBackground(Color.LIGHT_GRAY);
-
-    }
-
-    private void txtEnable() {
-//        txtNAoUser.setEditable(true);
-//        txtNAoUser.setBackground(Color.WHITE);
-//        txtUserNa.setEditable(true);
-//        txtUserNa.setBackground(Color.WHITE);
-//        txtDesig.setBackground(Color.WHITE);
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboBox_Designation;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnOk;
@@ -535,6 +602,5 @@ public class UserVeiwe extends javax.swing.JFrame {
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblUserName;
     private javax.swing.JLabel lblfea;
-    private javax.swing.JTextField txtDesig;
     // End of variables declaration//GEN-END:variables
 }

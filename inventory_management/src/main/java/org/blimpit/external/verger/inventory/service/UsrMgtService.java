@@ -87,7 +87,7 @@ public class UsrMgtService {
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //-------------------------------------------------------------------- ADD Features to Users ---------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------- ADD / Delete Features to Users ------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     @GET
@@ -112,8 +112,16 @@ public class UsrMgtService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Feature[] getSpecificFeatures(@PathParam("username")String user){
-        System.out.println("Client = "+user);
         return userControl.getusersFeatures(user);
+    }
+
+    @DELETE
+    @Path("/removeusersfeatures/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteUserFeatures(@PathParam("username") String user){
+        // System.out.println(" User Name = "+user);
+        return userControl.removeUserFeatures(user);
     }
 
 
@@ -168,53 +176,13 @@ public class UsrMgtService {
         return userControl.searchUsers(user);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @GET
-//    @Path("/designations")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Designation[] designations(){
-//        return designationManager.getDesignations();
-//    }
+    @GET
+    @Path("/designations")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Designation[] designations(){
+        return designationManager.getDesignations();
+    }
 //
 //
 //    @POST
