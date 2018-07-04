@@ -30,10 +30,12 @@ public class VergerMain extends javax.swing.JFrame {
      * @param name Name of the user
      *
      */
+    public  String username;
     public VergerMain(String name) {
         lookandfeels();
         initComponents();
-        lblWelcom.setText("Welcome " + name + " to Verger");
+        username = name;
+        lblWelcom.setText("Welcome " + username + " to Verger");
         ImageIcon icon = new ImageIcon("Image/icon2.png");
         setIconImage(icon.getImage());
 
@@ -773,7 +775,7 @@ public class VergerMain extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -873,14 +875,14 @@ public class VergerMain extends javax.swing.JFrame {
     }//GEN-LAST:event_lblformulationMouseClicked
 
     private void lblDispaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDispaMouseClicked
-        LabrotarySampeling labsample = new LabrotarySampeling();
+        LabrotarySampeling labsample = new LabrotarySampeling(username);
         labsample.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblDispaMouseClicked
 
     private void lblQCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQCMouseClicked
-
-        QCPlatform qcp = new QCPlatform();
+        System.out.println(username);
+        QCPlatform qcp = new QCPlatform(username);
         qcp.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblQCMouseClicked

@@ -444,10 +444,10 @@ public class UserAuth extends javax.swing.JFrame {
         UserManager us =new UserManager();
         us.loadpendinguser();
         us.loaduserinfo();
-            
+            this.dispose();
         UserManager usermanager = new UserManager();
         usermanager.setVisible(true);
-        this.dispose();
+        
     }//GEN-LAST:event_btnOkActionPerformed
 
 

@@ -469,7 +469,6 @@ public class UserVeiwe extends javax.swing.JFrame {
         jsonobjectUser.put("name", Name);
         jsonobjectUser.put("designation",Designation);
         jsonobjectUser.put("registrationStatus", "Accepted");
-        System.out.println("JasonObject = "+jsonobjectUser);
         client.sendData("http://localhost:8080/api/usrmgtservice/update", jsonobjectUser);
         apihandler.delete("http://localhost:8080/api/usrmgtservice/removeusersfeatures/"+UserName);
         
@@ -493,7 +492,6 @@ public class UserVeiwe extends javax.swing.JFrame {
                 
                 jsonobjectFEATURES.put("username", UserName);
                 jsonobjectFEATURES.put("features",jsonArray2);
-                System.out.println("JasonObject = "+jsonobjectFEATURES);
                 
                 client.sendData("http://localhost:8080/api/usrmgtservice/addfeatures", jsonobjectFEATURES);
                 

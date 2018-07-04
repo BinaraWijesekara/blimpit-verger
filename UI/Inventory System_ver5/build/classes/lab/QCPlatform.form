@@ -54,6 +54,10 @@
                               <Component id="jScrollPane1" pref="1153" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="jComboBox1" min="-2" pref="287" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="286" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" min="-2" pref="174" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
+                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -61,7 +65,7 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnBack" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="674" max="32767" attributes="0"/>
                           <Component id="btnaddProd" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="255" max="-2" attributes="0"/>
                           <Component id="btnprint" min="-2" pref="88" max="-2" attributes="0"/>
@@ -73,11 +77,22 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                  <Component id="jComboBox1" min="-2" pref="31" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jComboBox1" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="370" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="390" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -104,74 +119,19 @@
             <Component class="javax.swing.JTable" name="tabqc">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="12" rowCount="4">
-                    <Column editable="true" title="" type="java.lang.Boolean"/>
-                    <Column editable="false" title="Name" type="java.lang.String">
-                      <Data value="Citronella"/>
-                      <Data value="Basil"/>
-                      <Data value="Black Pepper"/>
-                      <Data value="Cassia"/>
-                    </Column>
-                    <Column editable="false" title="Supplier" type="java.lang.String">
-                      <Data value="Verger"/>
-                      <Data value="In House"/>
-                      <Data value="In House"/>
-                      <Data value="Supplier A"/>
-                    </Column>
-                    <Column editable="false" title="Type" type="java.lang.String">
-                      <Data value="A"/>
-                      <Data value="B"/>
-                      <Data value="C"/>
-                      <Data value="A"/>
-                    </Column>
-                    <Column editable="false" title="Details" type="java.lang.String">
-                      <Data value="Good Quality"/>
-                      <Data value="Bad Quality"/>
-                      <Data value="Medium Quality"/>
-                      <Data value="Excelent Quality"/>
-                    </Column>
-                    <Column editable="false" title="OR/RI OGLPT" type="java.lang.String">
-                      <Data value="OR NO 1"/>
-                      <Data value="OR No 222"/>
-                      <Data value="OR/RI OGLPT NO 333"/>
-                      <Data value="OR.RI OGLPT No 67"/>
-                    </Column>
-                    <Column editable="false" title="GC-1" type="java.lang.String">
-                      <Data value="GC-1 A"/>
-                      <Data value="GC_1 D"/>
-                      <Data value="GC-1S"/>
-                      <Data value="GC-1 p"/>
-                    </Column>
-                    <Column editable="false" title="GC-2" type="java.lang.String">
-                      <Data value="GC-2 A"/>
-                      <Data value="GC-2d"/>
-                      <Data value="GC-2 C"/>
-                      <Data value="GC-2 F"/>
-                    </Column>
-                    <Column editable="false" title="Status" type="java.lang.String">
-                      <Data value="Pending Result"/>
-                      <Data value="Decision table"/>
-                      <Data value="Done"/>
-                      <Data value="Pending"/>
-                    </Column>
-                    <Column editable="false" title="Comment" type="java.lang.String">
-                      <Data value="Pass all tests"/>
-                      <Data value="Fail 3 Tests"/>
-                      <Data value="Pass 2 Tests"/>
-                      <Data value="Rejected"/>
-                    </Column>
-                    <Column editable="true" title="Used for" type="java.lang.String">
-                      <Data value="Testing"/>
-                      <Data value="Production"/>
-                      <Data value="Testing"/>
-                      <Data value="Production"/>
-                    </Column>
-                    <Column editable="false" title="Documents" type="java.lang.String">
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                    </Column>
+                  <Table columnCount="12" rowCount="0">
+                    <Column editable="false" title="Name" type="java.lang.String"/>
+                    <Column editable="false" title="Supplier" type="java.lang.String"/>
+                    <Column editable="false" title="Type" type="java.lang.String"/>
+                    <Column editable="false" title="Details" type="java.lang.String"/>
+                    <Column editable="false" title="OR/RI OGLPT" type="java.lang.String"/>
+                    <Column editable="false" title="GC-1" type="java.lang.String"/>
+                    <Column editable="false" title="GC-2" type="java.lang.String"/>
+                    <Column editable="false" title="Status" type="java.lang.String"/>
+                    <Column editable="false" title="Comment" type="java.lang.String"/>
+                    <Column editable="true" title="Used for" type="java.lang.String"/>
+                    <Column editable="false" title="Documents" type="java.lang.String"/>
+                    <Column editable="false" title="ID" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -321,16 +281,18 @@
               <Font name="Tahoma" size="12" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Product Selection"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
+              <StringArray count="1">
+                <StringItem index="0" value="Select All"/>
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBox1ItemStateChanged"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnBack">
@@ -341,6 +303,16 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="jButton1"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

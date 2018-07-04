@@ -147,9 +147,9 @@ public class Addmindoc extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnaddFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddFilesActionPerformed
-        FileHandler filehandler = new FileHandler(jframeName);
-        String fileName = filehandler.fileName(this);
-        jTable1.getModel().setValueAt(fileName, jTable1.getModel().getRowCount()-1, 0);
+//        FileHandler filehandler = new FileHandler(jframeName);
+//        String fileName = filehandler.fileName(this);
+//        jTable1.getModel().setValueAt(fileName, jTable1.getModel().getRowCount()-1, 0);
     }//GEN-LAST:event_btnaddFilesActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed

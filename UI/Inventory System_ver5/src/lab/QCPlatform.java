@@ -5,11 +5,15 @@
  */
 package lab;
 
+import controller.ApiConnector;
+import gui.Login;
 import gui.VergerMain;
 import javax.swing.ImageIcon;
 
 import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,6 +22,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import user.UserManager;
 
 /**
  *
@@ -26,50 +35,90 @@ import javax.swing.table.DefaultTableModel;
 public class QCPlatform extends javax.swing.JFrame {
 
     static String lf = "com.jtattoo.plaf.mcwin.McWinLookAndFeel";
+    String username;
 
     /**
      * Creates new form Inventory
      */
-    public QCPlatform() {
+    public QCPlatform(String name) {
         lookandfeels();
         initComponents();
+        loadQC_Data();
+        loadProductID();
         ImageIcon icon = new ImageIcon("Image/icon2.png");
         setIconImage(icon.getImage());
-
-        tabqc.getModel().setValueAt(false, 0, 0);
-        tabqc.getModel().setValueAt(false, 1, 0);
-        tabqc.getModel().setValueAt(false, 2, 0);
-        tabqc.getModel().setValueAt(false, 3, 0);
-
-    }
-
-    public void setData(String name, String supp, String type, String details, String ORRI,String GC1,
-            String GC2, String status,String commnet, String usedfor, String documents) {
-
-        DefaultTableModel model = (DefaultTableModel) tabqc.getModel();
-        Vector row = new Vector();
-
-        row.add(false);
-        row.add(name);
-        row.add(supp);
-        row.add(type);
-        row.add(details);
-        row.add(ORRI);
-        row.add(GC1);
-        row.add(GC2);
-        row.add(status);
-        row.add(commnet);
-        row.add(usedfor);
-        row.add(documents);
+        username = name;
         
-        model.addRow(row);
-        
-
     }
+    
+    private  void loadQC_Data(){
+        ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/qcplatform/getqcdata/");
+        
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        
+        int arrayLength = 0;
+        Vector row;
 
-    /**
-     *
-     */
+        try {
+            jsonArray = (JSONArray) parser.parse(get);
+            arrayLength = jsonArray.size();
+            JSONObject jsonobj = new JSONObject();
+            DefaultTableModel model = (DefaultTableModel) tabqc.getModel();
+
+            for (int i = 0; i < arrayLength; i++) {
+                row = new Vector();
+                jsonobj = (JSONObject) jsonArray.get(i);
+                                                
+                row.add(0, jsonobj.get("name").toString());
+  //              row.add(1, jsonobj.get("product_id").toString());
+                row.add(1, jsonobj.get("supplier_id").toString());
+                row.add(2, jsonobj.get("type").toString());
+                row.add(3, jsonobj.get("details").toString());
+                row.add(4, jsonobj.get("or_ri").toString());
+                row.add(5, jsonobj.get("gc_1").toString());
+                row.add(6, jsonobj.get("gc_2").toString());
+                row.add(7, jsonobj.get("status").toString());
+                row.add(8, jsonobj.get("comment").toString());
+                row.add(9,jsonobj.get("usedfor").toString());
+                row.add(10,"ABC");
+                row.add(11,jsonobj.get("id").toString());
+
+                model.addRow(row);
+
+            }
+
+        } catch (ParseException ex) {
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void loadProductID(){
+        ApiConnector apiConnector = new ApiConnector();
+        String get = apiConnector.get("http://localhost:8080/api/qcplatform/proid");
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        int arrayLength = 0;
+        
+        try{
+            jsonArray = (JSONArray) parser.parse(get);
+            arrayLength = jsonArray.size();
+            JSONObject jsonObject = new JSONObject();
+            
+            for( int i = 0 ; i < arrayLength ; i++){
+                jsonObject = (JSONObject) jsonArray.get(i);
+                jComboBox1.addItem(jsonObject.get("name").toString());
+                
+            }
+            
+        }catch(ParseException ex){
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+
+    
     private static void lookandfeels() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -109,26 +158,25 @@ public class QCPlatform extends javax.swing.JFrame {
         btnprint = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         btnBack = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("QC Platform");
 
         tabqc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "Citronella", "Verger", "A", "Good Quality", "OR NO 1", "GC-1 A", "GC-2 A", "Pending Result", "Pass all tests", "Testing", "Attached"},
-                {null, "Basil", "In House", "B", "Bad Quality", "OR No 222", "GC_1 D", "GC-2d", "Decision table", "Fail 3 Tests", "Production", "Attached"},
-                {null, "Black Pepper", "In House", "C", "Medium Quality", "OR/RI OGLPT NO 333", "GC-1S", "GC-2 C", "Done", "Pass 2 Tests", "Testing", "Attached"},
-                {null, "Cassia", "Supplier A", "A", "Excelent Quality", "OR.RI OGLPT No 67", "GC-1 p", "GC-2 F", "Pending", "Rejected", "Production", "Attached"}
+
             },
             new String [] {
-                "", "Name", "Supplier", "Type", "Details", "OR/RI OGLPT", "GC-1", "GC-2", "Status", "Comment", "Used for", "Documents"
+                "Name", "Supplier", "Type", "Details", "OR/RI OGLPT", "GC-1", "GC-2", "Status", "Comment", "Used for", "Documents", "ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false, true, false
+                false, false, false, false, false, false, false, false, false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -193,12 +241,29 @@ public class QCPlatform extends javax.swing.JFrame {
         });
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Product Selection", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select All" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         btnBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lab/Left_20px.png"))); // NOI18N
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -218,11 +283,15 @@ public class QCPlatform extends javax.swing.JFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1153, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(286, 286, 286)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67)
+                                .addComponent(jButton1)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 674, Short.MAX_VALUE)
                         .addComponent(btnaddProd)
                         .addGap(255, 255, 255)
                         .addComponent(btnprint, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -230,11 +299,18 @@ public class QCPlatform extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -262,8 +338,10 @@ public class QCPlatform extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnaddProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaddProdActionPerformed
-
+        
+        String productID= jComboBox1.getSelectedItem().toString();
         AddProductsQC addpro = new AddProductsQC();
+        addpro.getProductID(productID);
         addpro.setVisible(true);
         this.dispose();
 
@@ -271,10 +349,28 @@ public class QCPlatform extends javax.swing.JFrame {
 
     private void tabqcMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabqcMouseClicked
 
+        
+        ApiConnector apiconnector = new ApiConnector();
+        String get = apiconnector.get("http://localhost:8080/api/usrmgtservice/getpassword/"+username);
+        
+        JSONParser parser = new JSONParser();
+        String Password="";
+       
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject = (JSONObject) parser.parse(get);
+            Password = jsonObject.get("password").toString();
+            System.out.println("Password of JSONObject is "+Password);
+                
+        } catch (ParseException ex) {
+            Logger.getLogger(AddProductsQC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         DefaultTableModel model = (DefaultTableModel) tabqc.getModel();
         JTable source = (JTable) evt.getSource();
         int row = source.rowAtPoint(evt.getPoint());
         int colum = source.columnAtPoint(evt.getPoint());
+        String key = model.getValueAt(row,11).toString();
 
         if (model.isCellEditable(row, colum)&&(colum!=0)) {
             JTextField valueField = new JTextField(25);
@@ -290,7 +386,7 @@ public class QCPlatform extends javax.swing.JFrame {
             int result = JOptionPane.showConfirmDialog(null, myPanel,
                     "Pls confrim your edit with Password", JOptionPane.OK_CANCEL_OPTION);
             if (result == 0) {
-                if (pswField.getText().equals("admin")) {
+                if (pswField.getText().equals(Password)) {
                     
                     model.setValueAt(valueField.getText(), row, colum);
                     
@@ -320,6 +416,71 @@ public class QCPlatform extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnprintActionPerformed
 
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        
+        
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+        String selectedItem = jComboBox1.getSelectedItem().toString();
+        System.out.println("Selected Item = "+selectedItem);
+        
+        if(selectedItem.equals("Select All")){
+            DefaultTableModel model = new DefaultTableModel();
+            model.setNumRows(0);
+            loadQC_Data();
+        }
+        else{
+        ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/qcplatform/searchbyid/"+selectedItem);
+        
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        
+        int arrayLength = 0;
+        Vector row;
+
+        try {
+            jsonArray = (JSONArray) parser.parse(get);
+            System.out.println("jsonAyya = "+jsonArray);
+            arrayLength = jsonArray.size();
+            JSONObject jsonobj = new JSONObject();
+            DefaultTableModel model = (DefaultTableModel) tabqc.getModel();
+            model.setRowCount(0);
+
+            for (int i = 0; i < arrayLength; i++) {
+                row = new Vector();
+                jsonobj = (JSONObject) jsonArray.get(i);
+                                                
+                row.add(0, jsonobj.get("name").toString());
+  //              row.add(1, jsonobj.get("product_id").toString());
+                row.add(1, jsonobj.get("supplier_id").toString());
+                row.add(2, jsonobj.get("type").toString());
+                row.add(3, jsonobj.get("details").toString());
+                row.add(4, jsonobj.get("or_ri").toString());
+                row.add(5, jsonobj.get("gc_1").toString());
+                row.add(6, jsonobj.get("gc_2").toString());
+                row.add(7, jsonobj.get("status").toString());
+                row.add(8, jsonobj.get("comment").toString());
+                row.add(9,jsonobj.get("usedfor").toString());
+                row.add(10,"ABC");
+                row.add(11,jsonobj.get("id").toString());
+
+                model.addRow(row);
+
+            }
+
+        } catch (ParseException ex) {
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println("nnnnnnnn "+username);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -333,7 +494,7 @@ public class QCPlatform extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new QCPlatform().setVisible(true);
+                new QCPlatform("User").setVisible(true);
             }
         });
     }
@@ -342,7 +503,9 @@ public class QCPlatform extends javax.swing.JFrame {
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnaddProd;
     private javax.swing.JButton btnprint;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton jButton1;
+    public javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JPanel jPanel1;

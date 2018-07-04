@@ -102,86 +102,20 @@
             <Component class="javax.swing.JTable" name="tabLab">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="14" rowCount="4">
-                    <Column editable="true" title="" type="java.lang.Boolean"/>
-                    <Column editable="false" title="Date" type="java.lang.String">
-                      <Data value="2017/12/20"/>
-                      <Data value="2017/12/30"/>
-                      <Data value="2018/01/20"/>
-                      <Data value="2018/02/30"/>
-                    </Column>
-                    <Column editable="false" title="Customer " type="java.lang.String">
-                      <Data value="Customer A"/>
-                      <Data value="Custermer B"/>
-                      <Data value="Customer C"/>
-                      <Data value="Customer D"/>
-                    </Column>
-                    <Column editable="false" title="Product " type="java.lang.String">
-                      <Data value="Oilment"/>
-                      <Data value="Cream"/>
-                      <Data value="Natural Oil"/>
-                      <Data value="Purfume"/>
-                    </Column>
-                    <Column editable="false" title="Type" type="java.lang.String">
-                      <Data value="A"/>
-                      <Data value="C"/>
-                      <Data value="D"/>
-                      <Data value="E"/>
-                    </Column>
-                    <Column editable="false" title="Sample size " type="java.lang.String">
-                      <Data value="200"/>
-                      <Data value="100"/>
-                      <Data value="50"/>
-                      <Data value="250"/>
-                    </Column>
-                    <Column editable="false" title="If Lot" type="java.lang.String">
-                      <Data value="IfLot-1"/>
-                      <Data value="IfLot-2"/>
-                      <Data value="If-Lot-3"/>
-                      <Data value="If-Lot-4"/>
-                    </Column>
-                    <Column editable="false" title="Lot Number" type="java.lang.String">
-                      <Data value="1701OILP001"/>
-                      <Data value="1705CERP003"/>
-                      <Data value="1706NATP004"/>
-                      <Data value="1712PURP005"/>
-                    </Column>
-                    <Column editable="false" title="Sample Number" type="java.lang.String">
-                      <Data value="OIL1701001"/>
-                      <Data value="CER1704005"/>
-                      <Data value="NAT1702007"/>
-                      <Data value="PUR171040"/>
-                    </Column>
-                    <Column editable="true" title="Formulation Ref" type="java.lang.String">
-                      <Data value="Sap-Oil-1712"/>
-                      <Data value="Sap-Cer-1701"/>
-                      <Data value="Sap-Nat-1705"/>
-                      <Data value="Sap-Pur-1706"/>
-                    </Column>
-                    <Column editable="true" title="Status" type="java.lang.String">
-                      <Data value="Pending"/>
-                      <Data value="Pending"/>
-                      <Data value="Complete"/>
-                      <Data value="Complete"/>
-                    </Column>
-                    <Column editable="true" title="Comment" type="java.lang.String">
-                      <Data value="Good"/>
-                      <Data value="Bad"/>
-                      <Data value="Excelent"/>
-                      <Data value="Medium"/>
-                    </Column>
-                    <Column editable="true" title="Shipment Date" type="java.lang.String">
-                      <Data value="2018/01/02"/>
-                      <Data value="2018/02/10"/>
-                      <Data value="2018/02/11"/>
-                      <Data value="2018/03/10"/>
-                    </Column>
-                    <Column editable="false" title="Documents" type="java.lang.String">
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                      <Data value="Attached"/>
-                    </Column>
+                  <Table columnCount="13" rowCount="0">
+                    <Column editable="false" title="Date" type="java.lang.String"/>
+                    <Column editable="false" title="Customer " type="java.lang.String"/>
+                    <Column editable="false" title="Product " type="java.lang.String"/>
+                    <Column editable="false" title="Type" type="java.lang.String"/>
+                    <Column editable="false" title="Sample size " type="java.lang.String"/>
+                    <Column editable="false" title="If Lot" type="java.lang.String"/>
+                    <Column editable="false" title="Lot Number" type="java.lang.String"/>
+                    <Column editable="false" title="Sample Number" type="java.lang.String"/>
+                    <Column editable="false" title="Formulation Ref" type="java.lang.String"/>
+                    <Column editable="true" title="Status" type="java.lang.String"/>
+                    <Column editable="true" title="Comment" type="java.lang.String"/>
+                    <Column editable="true" title="Shipment Date" type="java.lang.String"/>
+                    <Column editable="false" title="Documents" type="java.lang.String"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

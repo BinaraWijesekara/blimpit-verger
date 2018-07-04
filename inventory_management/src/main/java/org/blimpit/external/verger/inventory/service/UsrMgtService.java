@@ -1,13 +1,14 @@
 package org.blimpit.external.verger.inventory.service;
 
+import org.blimpit.external.verger.inventory.controller.QcControl;
 import org.blimpit.external.verger.inventory.controller.UserControl;
 import org.blimpit.external.verger.inventory.model.Log;
+import org.blimpit.external.verger.inventory.model.QC_PlatForm;
 import org.blimpit.utils.usermanagement.Constants;
 import org.blimpit.utils.usermanagement.designation.DesignationManager;
 import org.blimpit.utils.usermanagement.feature.FeatureManager;
 import org.blimpit.utils.usermanagement.model.*;
 import org.blimpit.utils.usermanagement.user.UserManager;
-import org.glassfish.jersey.internal.util.Base64;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -22,6 +23,8 @@ public class UsrMgtService {
     private FeatureManager featureMgtController = FeatureManager.getInstance("config.properties");
     private DesignationManager designationManager = DesignationManager.getInstance("config.properties");
     private UserControl userControl=new UserControl();
+    private QcControl qcControl =new QcControl();
+
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------- User Registration / User Login / ReSet Password--------------------------------------------------------------
@@ -47,21 +50,16 @@ public class UsrMgtService {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(Credential credential){
-
+    public String login(Credential credential){
      ResponseStatus responseStatus = usrMgtController.authenticate(credential);
-        if(responseStatus.isSuccess()){
+        return responseStatus.getMessage();}
 
-         String purebearer = credential.getUsername()+":"+credential.getPassword();
-         String bearer = Base64.encodeAsString(purebearer);
-         return Response.status(Response.Status.OK).entity
-                (" User "+ credential.getUsername()+ " logged succesfully").
-                header(Constants.AUTHORIZATION, Constants.AUTHORIZATION_SCHEME_BASIC+ " "+bearer)
-                 .build();
-     }
-        return Response.status(Response.Status.UNAUTHORIZED).entity
-                (responseStatus.getMessage()).build();
-    }
+    @GET
+    @Path("getpassword/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public User getPaasword(@PathParam("username") String value) {
+        return userControl.getPassword(value); }
 
     @GET
     @Path("/logcount")
@@ -183,6 +181,15 @@ public class UsrMgtService {
     public Designation[] designations(){
         return designationManager.getDesignations();
     }
+
+
+//    @GET
+//    @Path("/getqcdata")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public QC_PlatForm[] getQCdata(){
+//        return qcControl.getQC_data();
+//    }
 //
 //
 //    @POST

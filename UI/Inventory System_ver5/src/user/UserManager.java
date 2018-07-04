@@ -67,6 +67,7 @@ public class UserManager extends javax.swing.JFrame {
 
         loadpendinguser();
         loaduserinfo();
+       
     }
 
     public void loadpendinguser() {
@@ -75,6 +76,7 @@ public class UserManager extends javax.swing.JFrame {
         
         JSONParser parser = new JSONParser();
         JSONArray jsonArray = null;
+        
         
         int arrayLength = 0;
         Vector row;
@@ -96,6 +98,11 @@ public class UserManager extends javax.swing.JFrame {
                 model.addRow(row);
 
             }
+            int rowcount = model.getRowCount();
+            if(rowcount >0){
+                 jLabel3.setText("*");
+            }
+           
 
         } catch (ParseException ex) {
             Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -209,12 +216,13 @@ public class UserManager extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel3 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabuserInfo = new javax.swing.JTable();
         txtUMSer = new javax.swing.JTextField();
-        btnUMsea = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabUserRequest = new javax.swing.JTable();
@@ -224,7 +232,14 @@ public class UserManager extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Verger International");
+        getContentPane().setLayout(null);
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(252, 37, 60, 40);
+
+        tabuserInfo.setAutoCreateRowSorter(true);
         tabuserInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -271,37 +286,37 @@ public class UserManager extends javax.swing.JFrame {
             }
         });
 
-        btnUMsea.setText("Search");
-        btnUMsea.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUMseaActionPerformed(evt);
-            }
-        });
+        jLabel2.setText("Search");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(txtUMSer, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnUMsea)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(46, 46, 46)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 667, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtUMSer, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUMSer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUMsea))
-                .addContainerGap())
+                    .addComponent(jLabel2))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("User Info", jPanel3);
+
+        jPanel4.setLayout(null);
 
         tabUserRequest.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -326,24 +341,19 @@ public class UserManager extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tabUserRequest);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-        );
+        jPanel4.add(jScrollPane2);
+        jScrollPane2.setBounds(40, 40, 680, 420);
 
         jTabbedPane1.addTab("User Request", jPanel4);
+
+        getContentPane().add(jTabbedPane1);
+        jTabbedPane1.setBounds(40, 50, 765, 590);
 
         jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Blimp_50x.png"))); // NOI18N
         jLabel1.setOpaque(true);
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(10, 680, 50, 25);
 
         btnUMok.setText("Ok");
         btnUMok.addActionListener(new java.awt.event.ActionListener() {
@@ -351,6 +361,8 @@ public class UserManager extends javax.swing.JFrame {
                 btnUMokActionPerformed(evt);
             }
         });
+        getContentPane().add(btnUMok);
+        btnUMok.setBounds(770, 660, 55, 31);
 
         btnback.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user/Left_20px.png"))); // NOI18N
         btnback.addActionListener(new java.awt.event.ActionListener() {
@@ -358,42 +370,10 @@ public class UserManager extends javax.swing.JFrame {
                 btnbackActionPerformed(evt);
             }
         });
+        getContentPane().add(btnback);
+        btnback.setBounds(740, 660, 30, 30);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnback, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnUMok, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnUMok, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnback, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)))
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        setSize(new java.awt.Dimension(705, 685));
+        setSize(new java.awt.Dimension(857, 733));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -451,52 +431,6 @@ public class UserManager extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnbackActionPerformed
 
-    private void btnUMseaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUMseaActionPerformed
-//        
-//        String name=txtUMSer.getText();
-//        ApiConnector apiConnector = new ApiConnector();
-//        String get =apiConnector.get("http://localhost:8080/api/usrmgtservice/users/?username="+name);
-//        
-//        JSONParser parser = new JSONParser();
-//        JSONArray jsonArray = null;
-//        
-//        int arrayLength = 0;
-//        Vector row;
-//
-//        try {
-//            jsonArray = (JSONArray) parser.parse(get);
-//            arrayLength = jsonArray.size();
-//            JSONObject jsonobj = new JSONObject();
-//            DefaultTableModel model = (DefaultTableModel) tabuserInfo.getModel();
-//
-//            for (int i = 0; i < arrayLength; i++) {
-//                row = new Vector();
-//                jsonobj = (JSONObject) jsonArray.get(i);
-//                                                
-//                row.add(0, jsonobj.get("username").toString());
-//                row.add(1, jsonobj.get("name").toString());
-//                row.add(2, jsonobj.get("designation").toString());
-//                row.add(3,"Accepted");
-//
-//                model.addRow(row);
-//
-//            }
-//
-//        } catch (ParseException ex) {
-//            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
-
-
-
-
-
-
-
-
-
-    }//GEN-LAST:event_btnUMseaActionPerformed
-
     private void txtUMSerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUMSerKeyReleased
        
         if(txtUMSer.getText().equals("")){
@@ -531,9 +465,10 @@ public class UserManager extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnUMok;
-    private javax.swing.JButton btnUMsea;
     private javax.swing.JButton btnback;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;

@@ -16,8 +16,7 @@ import javax.swing.ImageIcon;
  */
 public class ViewProductsQC extends javax.swing.JFrame {
 
-    QCPlatform f = new QCPlatform();
-
+    
     /**
      * Creates new Form mouseHover
      */
@@ -569,8 +568,8 @@ public class ViewProductsQC extends javax.swing.JFrame {
         
         //f.getData(txtInvName.getText(),quant,ppu);
         // Send the Data to the db for storing
-        f.setVisible(true);
-        this.dispose();
+//        f.setVisible(true);
+//        this.dispose();
 
     }//GEN-LAST:event_btnOkActionPerformed
 

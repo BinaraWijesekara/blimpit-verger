@@ -498,8 +498,8 @@ public class AddMaterials extends javax.swing.JFrame {
     }//GEN-LAST:event_txtquantityActionPerformed
 
     private void btnattachActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnattachActionPerformed
-        FileHandler filehandler = new FileHandler("Matterial");
-        filehandler.fileName(this);
+//        FileHandler filehandler = new FileHandler("Matterial");
+//        filehandler.fileName(this);
     }//GEN-LAST:event_btnattachActionPerformed
     
     static private void lookandfeels() {

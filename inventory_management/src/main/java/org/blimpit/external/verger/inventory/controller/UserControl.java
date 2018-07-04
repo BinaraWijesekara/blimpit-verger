@@ -190,6 +190,22 @@ public class UserControl {
         return (Feature[])featureList.toArray(new Feature[featureList.size()]);
     }
 
+    public User getPassword(String value){
+
+        User user = new User();
+        String query = "select password from users where username='"+value+"';";
+        try {
+            Record[] records = mySQLConnector.executeQuery(query,null);
+            user = new User();
+            user.setPassword(records[0].getRecordAttributes().get("password"));
+
+
+        }catch (ConnectorException var9){
+
+        }
+        return user;
+    }
+
     public User[] searchUsers(String us){
         ArrayList userMap = new ArrayList();
 

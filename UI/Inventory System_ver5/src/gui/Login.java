@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import lab.QCPlatform;
 import org.json.simple.JSONArray;
 import user.UserReg;
 import org.json.simple.JSONObject;
@@ -25,6 +26,7 @@ import user.UserManager;
  */
 public class Login extends javax.swing.JFrame {
 
+    public String username;
     
     /**
      * Creates new form Login
@@ -36,8 +38,8 @@ public class Login extends javax.swing.JFrame {
         lookandfeels();
         ImageIcon icon = new ImageIcon("Image/icon2.png");
         setIconImage(icon.getImage());
-
-    }
+        
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,24 +50,30 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        lblIcon1 = new javax.swing.JLabel();
         lblIcon = new javax.swing.JLabel();
         lblgreet = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        psw = new javax.swing.JPasswordField();
-        jPanel3 = new javax.swing.JPanel();
-        txtUserName = new javax.swing.JTextField();
-        jPanel12 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        psw = new javax.swing.JPasswordField();
+        txtUserName = new javax.swing.JTextField();
         btnlog = new javax.swing.JButton();
         btnsignup = new javax.swing.JButton();
+        Label_Verification = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login Window");
+        getContentPane().setLayout(null);
+
+        lblIcon1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIcon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/plus.png"))); // NOI18N
+        getContentPane().add(lblIcon1);
+        lblIcon1.setBounds(190, 160, 24, 24);
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/user_male_Edit.png"))); // NOI18N
+        getContentPane().add(lblIcon);
+        lblIcon.setBounds(83, 17, 165, 165);
 
         lblgreet.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblgreet.setText("Hi User");
@@ -76,6 +84,19 @@ public class Login extends javax.swing.JFrame {
                 lblgreetMouseClicked(evt);
             }
         });
+        getContentPane().add(lblgreet);
+        lblgreet.setBounds(126, 200, 76, 22);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setText("Powerd By");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(6, 385, 68, 14);
+
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Blimp_50x.png"))); // NOI18N
+        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(10, 405, 58, 15);
 
         psw.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         psw.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -85,22 +106,8 @@ public class Login extends javax.swing.JFrame {
                 pswMouseEntered(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(psw, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(psw, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        getContentPane().add(psw);
+        psw.setBounds(40, 313, 256, 21);
 
         txtUserName.setText("User Name");
         txtUserName.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -108,48 +115,8 @@ public class Login extends javax.swing.JFrame {
                 txtUserNameMouseEntered(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel12.setText("Powerd By");
-
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Blimp_50x.png"))); // NOI18N
-        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addComponent(jLabel12)
-                .addGap(0, 0, 0)
-                .addComponent(jLabel13))
-        );
+        getContentPane().add(txtUserName);
+        txtUserName.setBounds(40, 272, 256, 23);
 
         btnlog.setText("Login");
         btnlog.addActionListener(new java.awt.event.ActionListener() {
@@ -157,6 +124,8 @@ public class Login extends javax.swing.JFrame {
                 btnlogActionPerformed(evt);
             }
         });
+        getContentPane().add(btnlog);
+        btnlog.setBounds(108, 352, 123, 25);
 
         btnsignup.setText("Signup");
         btnsignup.addActionListener(new java.awt.event.ActionListener() {
@@ -164,75 +133,21 @@ public class Login extends javax.swing.JFrame {
                 btnsignupActionPerformed(evt);
             }
         });
+        getContentPane().add(btnsignup);
+        btnsignup.setBounds(254, 8, 79, 31);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnsignup))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(123, 123, 123)
-                                .addComponent(lblgreet))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addComponent(btnlog, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(77, 77, 77)
-                                .addComponent(lblIcon)))
-                        .addGap(0, 8, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(lblIcon)
-                .addGap(18, 18, 18)
-                .addComponent(lblgreet)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnlog, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnsignup)))
-        );
+        Label_Verification.setFont(new java.awt.Font("Manjari Regular", 0, 8)); // NOI18N
+        Label_Verification.setForeground(new java.awt.Color(204, 0, 0));
+        getContentPane().add(Label_Verification);
+        Label_Verification.setBounds(40, 249, 256, 17);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        setSize(new java.awt.Dimension(318, 442));
+        setSize(new java.awt.Dimension(346, 466));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnlogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlogActionPerformed
 
+        username = txtUserName.getText();
       JSONObject jsonObject = new JSONObject(); //for Send UserName & Password to BackEnd (Verify)
       JSONObject jsonObjectLog = new JSONObject(); // for Store Log Count
       JSONObject jsonObjectUpdate =  new JSONObject(); // for Store updated data
@@ -242,12 +157,13 @@ public class Login extends javax.swing.JFrame {
       JSONArray jsonArray = null;
       int count=0;
       
-      if((txtUserName.getText()==null)||(psw.getText()==null))
+       if((txtUserName.getText()==null)||(psw.getText()==null))
       {
           JOptionPane.showMessageDialog(null,"Please Enter valid Username and Password");
       }
       else
       {
+
           try {
                jsonObject.put("username",txtUserName.getText());
                jsonObject.put("password",client.encrypt(psw.getText()));
@@ -256,10 +172,10 @@ public class Login extends javax.swing.JFrame {
              Logger.getLogger(UserReg.class.getName()).log(Level.SEVERE, null, ex);
 
           }
-          
-          int login = client.login("http://localhost:8080/api/usrmgtservice/login", jsonObject);
-          
           ApiConnector apiConnector = new ApiConnector();
+        String getLogin =  apiConnector.post("http://localhost:8080/api/usrmgtservice/login",jsonObject);
+          
+          
           String get = apiConnector.get("http://localhost:8080/api/usrmgtservice/logcount");
           try{
               jsonArray = (JSONArray) parser.parse(get);
@@ -271,7 +187,7 @@ public class Login extends javax.swing.JFrame {
                Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
           }
           
-          if(login==200){
+          if(getLogin.equals("Login Success\r")){
             if(txtUserName.getText().equals("admin")&& count == 0)
             {
                 jsonObjectUpdate.put("username","admin");
@@ -294,9 +210,8 @@ public class Login extends javax.swing.JFrame {
                 vm.setVisible(true);
                 this.dispose();
             }
-          }
-          
-          else{
+          }else{
+              Label_Verification.setText(getLogin);
               txtUserName.setText("");
               psw.setText("");
           }
@@ -319,7 +234,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_pswMouseEntered
 
     private void lblgreetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblgreetMouseClicked
-        jPanel1.setVisible(true);
+        
     }//GEN-LAST:event_lblgreetMouseClicked
 
     private void btnsignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsignupActionPerformed
@@ -368,15 +283,13 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Label_Verification;
     private javax.swing.JButton btnlog;
     private javax.swing.JButton btnsignup;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblIcon;
+    private javax.swing.JLabel lblIcon1;
     private javax.swing.JLabel lblgreet;
     private javax.swing.JPasswordField psw;
     private javax.swing.JTextField txtUserName;

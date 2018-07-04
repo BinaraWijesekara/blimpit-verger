@@ -5,11 +5,26 @@
  */
 package lab;
 
+import controller.ApiConnector;
+import controller.Client;
+import controller.FileHandleingClient;
 import controller.FileHandler;
 import gui.VergerMain;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -19,16 +34,18 @@ public class AddLabSamples extends javax.swing.JFrame {
 
     
 
-    /**
-     * Creates new Form mouseHover
-     */
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private int lotID;
+    String LotNumber="";
     public AddLabSamples() {
         lookandfeels();
         initComponents();
         dcShipdate.setDateFormatString("yyyy/MM/dd");
         ImageIcon icon = new ImageIcon("Image/icon.png");
         setIconImage(icon.getImage());
-
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MMM/dd");
+        System.out.println("hhhhh "+dtf);
         //lblLotNo.setText("1811"+txtproduct.getText().substring(0,2)+value);
     }
 
@@ -75,7 +92,7 @@ public class AddLabSamples extends javax.swing.JFrame {
         txtstatues = new javax.swing.JTextField();
         jPanel13 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
-        txtsampleno = new javax.swing.JTextField();
+        lblSample = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         txtcomment = new javax.swing.JTextField();
@@ -279,6 +296,14 @@ public class AddLabSamples extends javax.swing.JFrame {
                 txtIfLotActionPerformed(evt);
             }
         });
+        txtIfLot.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIfLotKeyTyped(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIfLotKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -322,10 +347,10 @@ public class AddLabSamples extends javax.swing.JFrame {
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblLotNo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23))
+                .addContainerGap(7, Short.MAX_VALUE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(lblLotNo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -333,6 +358,12 @@ public class AddLabSamples extends javax.swing.JFrame {
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel24.setText("Formula ref");
+
+        txtformularef.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtformularefActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -386,6 +417,8 @@ public class AddLabSamples extends javax.swing.JFrame {
         jLabel26.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel26.setText("Sample number");
 
+        lblSample.setText("Lot Number");
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
@@ -393,17 +426,17 @@ public class AddLabSamples extends javax.swing.JFrame {
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel26)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(txtsampleno, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblSample, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
-                    .addComponent(txtsampleno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSample, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -437,6 +470,8 @@ public class AddLabSamples extends javax.swing.JFrame {
 
         jLabel28.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel28.setText("Shipment Date");
+
+        dcShipdate.setDateFormatString("yyyy/MM/dd");
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -480,7 +515,7 @@ public class AddLabSamples extends javax.swing.JFrame {
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel29)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addComponent(lblfileName, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnattch)
@@ -616,13 +651,74 @@ public class AddLabSamples extends javax.swing.JFrame {
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
  
-        LabrotarySampeling f = new LabrotarySampeling();
-        //f.getData(txtInvName.getText(),quant,ppu);
-        // Send the Data to the db for storing
-        f.getData(cmbCustomer.getSelectedItem().toString(), txtproduct.getText(), txttype.getText(), txtsamplesize.getText(), txtIfLot.getText(),
-                lblLotNo.getText(), txtsampleno.getText(), txtformularef.getText(), txtstatues.getText(), txtcomment.getText(), 
-                dcShipdate.getDate().toString(), lblfileName.getText());
-        f.setVisible(true);
+      JSONObject jsonObjectLog = new JSONObject(); 
+      JSONParser parser = new JSONParser();
+      String maxValue="";
+        ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/LabSampling/getMaxValue/");
+        
+        try {
+            jsonObjectLog=(JSONObject) parser.parse(get);
+            maxValue = jsonObjectLog.get("lotNumber").toString();
+        } catch (ParseException ex) {
+            Logger.getLogger(AddLabSamples.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
+        String[] parts = maxValue.split("POO");
+        int part2 = Integer.parseInt(parts[1]);
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	LocalDate localDate = LocalDate.now();
+        int Year = localDate.getYear();
+        int Month = localDate.getMonthValue();
+        String yr = String.valueOf(Year);
+        String mn = String.valueOf(Month);
+        int id=part2+1;
+        
+         int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to Add New Entry","Warning",JOptionPane.YES_NO_OPTION);
+        
+        if(dialogResult == JOptionPane.YES_OPTION)
+            {
+                String Date = localDate.toString();
+                String Name = cmbCustomer.getSelectedItem().toString();
+                String Product = txtproduct.getText().toString();
+                String Type = txttype.getText().toString();
+                String SampleSize = txtsamplesize.getText().toString();
+                String IfLot = txtIfLot.getText().toString();
+                LotNumber = yr+mn+Product+"POO"+id;
+                String SampleNumber = Product+yr+mn+id+IfLot;
+                String Formulation =  txtformularef.getText().toString();
+                String Status = txtstatues.getText().toString(); 
+                String Comment = txtcomment.getText().toString(); 
+                Date x = dcShipdate.getDate();
+                String ShipmentDate = String.format("%1$ty/%1$tm/%1$td", x);
+                String Documents;
+                
+                Client client = new Client();
+                JSONObject QcObject = new JSONObject();
+
+                QcObject.put("date",Date);
+                QcObject.put("customer",Name);
+                QcObject.put("product",Product);
+                QcObject.put("type",Type);
+                QcObject.put("sampleSize",SampleSize);
+                QcObject.put("ifLot", IfLot);
+                QcObject.put("lotNumber", LotNumber);
+                QcObject.put("sampleNumber", SampleNumber);
+                QcObject.put("formulation",Formulation);
+                QcObject.put("status",Status);
+                QcObject.put("comment", Comment);
+                QcObject.put("shipmentDate", ShipmentDate);
+                QcObject.put("documents", "ABC");
+
+                client.sendData("http://localhost:8080/api/LabSampling/addNewLabData",QcObject);
+                
+                this.dispose();
+                LabrotarySampeling lbs = new LabrotarySampeling("");
+                lbs.setVisible(true);
+            }  
+        
+	
         this.dispose();
 
     }//GEN-LAST:event_btnOkActionPerformed
@@ -657,14 +753,62 @@ public class AddLabSamples extends javax.swing.JFrame {
         Random rand = new Random();
         int value = rand.nextInt(999);
 
-        lblLotNo.setText("1811" + txtproduct.getText().substring(0, 3) + value);
+        lblSample.setText("1811" + txtproduct.getText().substring(0, 3) + value);
     }//GEN-LAST:event_txttypeActionPerformed
 
     private void btnattchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnattchActionPerformed
-        FileHandler filehandler = new FileHandler("Matterial");
-        String fileName = filehandler.fileName(this);
-        lblfileName.setText(fileName);
+        System.out.println("LOT "+LotNumber);
+        FileHandler filehandler = new FileHandler("Matterial","");
+        String filePath = filehandler.fileName(this);
+        FileHandleingClient fhc = new FileHandleingClient();
+        
+        fhc.uploadFiles(filePath, "http://localhost:8080/api/documentHandler/fileUpLoader?destination=Labrotary");
+        lblfileName.setText(filePath);
+        System.out.println(filePath);
     }//GEN-LAST:event_btnattchActionPerformed
+
+    private void txtIfLotKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIfLotKeyReleased
+       
+    }//GEN-LAST:event_txtIfLotKeyReleased
+
+    private void txtIfLotKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIfLotKeyTyped
+ JSONObject jsonObjectLog = new JSONObject(); 
+      JSONParser parser = new JSONParser();
+      String maxValue="";
+        ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/LabSampling/getMaxValue/");
+        
+        try {
+            jsonObjectLog=(JSONObject) parser.parse(get);
+            maxValue = jsonObjectLog.get("lotNumber").toString();
+        } catch (ParseException ex) {
+            Logger.getLogger(AddLabSamples.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
+        String[] parts = maxValue.split("POO");
+        int part2 = Integer.parseInt(parts[1]);
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	LocalDate localDate = LocalDate.now();
+        int Year = localDate.getYear();
+        int Month = localDate.getMonthValue();
+        String yr = String.valueOf(Year);
+        String mn = String.valueOf(Month);
+        int id=part2+1;
+        
+                String Date = localDate.toString();
+                String Product = txtproduct.getText().toString();
+                String IfLot = txtIfLot.getText().toString();
+                LotNumber = yr+mn+Product+"POO"+id;
+                String SampleNumber = Product+yr+mn+id+IfLot;
+                lblLotNo.setText(LotNumber);
+                lblSample.setText(SampleNumber);
+              
+    }//GEN-LAST:event_txtIfLotKeyTyped
+
+    private void txtformularefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtformularefActionPerformed
+       
+    }//GEN-LAST:event_txtformularefActionPerformed
 
     static private void lookandfeels() {
         try {
@@ -765,12 +909,12 @@ public class AddLabSamples extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JLabel lblLotNo;
+    private javax.swing.JLabel lblSample;
     private javax.swing.JLabel lblfileName;
     private javax.swing.JTextField txtIfLot;
     private javax.swing.JTextField txtcomment;
     private javax.swing.JTextField txtformularef;
     private javax.swing.JTextField txtproduct;
-    private javax.swing.JTextField txtsampleno;
     private javax.swing.JTextField txtsamplesize;
     private javax.swing.JTextField txtstatues;
     private javax.swing.JTextField txttype;

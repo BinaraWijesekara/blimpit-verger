@@ -6,12 +6,17 @@
 package lab;
 
 import com.toedter.calendar.JDateChooser;
+import controller.ApiConnector;
+import controller.Client;
 import gui.VergerMain;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,6 +25,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -28,61 +37,68 @@ import javax.swing.table.DefaultTableModel;
 public class LabrotarySampeling extends javax.swing.JFrame {
 
     static String lf = "com.jtattoo.plaf.mcwin.McWinLookAndFeel";
-
+    String username;
     JComboBox<String> customer = new JComboBox<String>();
 
-    /**
-     * Creates new form Inventory
-     */
-    public LabrotarySampeling() {
+    public LabrotarySampeling(String name) {
         lookandfeels();
         initComponents();
+        loadLabData();
         ImageIcon icon = new ImageIcon("Image/icon2.png");
         setIconImage(icon.getImage());
         shipDate.setDateFormatString("yyyy/MM/dd");
+        username=name;
 
     }
 
     JDateChooser shipDate = new JDateChooser();
 
-    public void getData(String customer, String product, String type, String sampleSize, String ifLot, String lotNumber, String sampnumber, String formuref,
-            String status, String comment, String shipmentdate, String documents) {
 
-        DefaultTableModel model = (DefaultTableModel) tabLab.getModel();
-        Vector row = new Vector();
+        private  void loadLabData(){
+        ApiConnector apiConnector = new ApiConnector();
+        String get =apiConnector.get("http://localhost:8080/api/LabSampling/getLabData");
+        
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = null;
+        
+        int arrayLength = 0;
+        Vector row;
 
-        LocalDate date = LocalDate.now();
+        try {
+            jsonArray = (JSONArray) parser.parse(get);
+            arrayLength = jsonArray.size();
+            JSONObject jsonobj = new JSONObject();
+            DefaultTableModel model = (DefaultTableModel) tabLab.getModel();
 
-        //System.out.println(dt1.format(date));
-        row.add(0, false);
-        row.add(1, date.toString());
-        row.add(2, customer);
-        row.add(3, product);
-        row.add(4, type);
-        row.add(5, sampleSize);
-        row.add(6, ifLot);
-        row.add(7, lotNumber);
-        row.add(8, sampleSize);
-        row.add(9, formuref);
-        row.add(10, status);
-        row.add(11, comment);
-        row.add(12, shipmentdate);
-        row.add(13, documents);
+            for (int i = 0; i < arrayLength; i++) {
+                row = new Vector();
+                jsonobj = (JSONObject) jsonArray.get(i);
+                                                
+                row.add(0,jsonobj.get("date").toString());
+                row.add(1,jsonobj.get("customer").toString());
+                row.add(2,jsonobj.get("product").toString());
+                row.add(3,jsonobj.get("type").toString());
+                row.add(4,jsonobj.get("sampleSize").toString());
+                row.add(5,jsonobj.get("ifLot").toString());
+                row.add(6,jsonobj.get("lotNumber").toString());
+                row.add(7,jsonobj.get("sampleNumber").toString());
+                row.add(8,jsonobj.get("formulation").toString());
+                row.add(9,jsonobj.get("status").toString());
+                row.add(10,jsonobj.get("comment").toString());
+                row.add(11,jsonobj.get("shipmentDate").toString());
+                row.add(12,jsonobj.get("documents").toString());
 
-        model.addRow(row);
+                model.addRow(row);
 
+            }
+
+        } catch (ParseException ex) {
+            Logger.getLogger(LabrotarySampeling.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
-    /**
-     *
-     */
     private static void lookandfeels() {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
                 javax.swing.UIManager.setLookAndFeel(lf);
             }
         } catch (ClassNotFoundException ex) {
@@ -120,20 +136,17 @@ public class LabrotarySampeling extends javax.swing.JFrame {
 
         tabLab.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "2017/12/20", "Customer A", "Oilment", "A", "200", "IfLot-1", "1701OILP001", "OIL1701001", "Sap-Oil-1712", "Pending", "Good", "2018/01/02", "Attached"},
-                {null, "2017/12/30", "Custermer B", "Cream", "C", "100", "IfLot-2", "1705CERP003", "CER1704005", "Sap-Cer-1701", "Pending", "Bad", "2018/02/10", "Attached"},
-                {null, "2018/01/20", "Customer C", "Natural Oil", "D", "50", "If-Lot-3", "1706NATP004", "NAT1702007", "Sap-Nat-1705", "Complete", "Excelent", "2018/02/11", "Attached"},
-                {null, "2018/02/30", "Customer D", "Purfume", "E", "250", "If-Lot-4", "1712PURP005", "PUR171040", "Sap-Pur-1706", "Complete", "Medium", "2018/03/10", "Attached"}
+
             },
             new String [] {
-                "", "Date", "Customer ", "Product ", "Type", "Sample size ", "If Lot", "Lot Number", "Sample Number", "Formulation Ref", "Status", "Comment", "Shipment Date", "Documents"
+                "Date", "Customer ", "Product ", "Type", "Sample size ", "If Lot", "Lot Number", "Sample Number", "Formulation Ref", "Status", "Comment", "Shipment Date", "Documents"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, true, true, true, true, false
+                false, false, false, false, false, false, false, false, false, true, true, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -273,57 +286,21 @@ public class LabrotarySampeling extends javax.swing.JFrame {
     }//GEN-LAST:event_btnaddActionPerformed
 
     private void tabLabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabLabMouseClicked
-
+      
         DefaultTableModel model = (DefaultTableModel) tabLab.getModel();
         JTable source = (JTable) evt.getSource();
         int row = source.rowAtPoint(evt.getPoint());
-        int colum = source.columnAtPoint(evt.getPoint());
-
-        if (colum == 8) {
-            JPasswordField pswField = new JPasswordField(15);
-            JTextField valueField = new JTextField(15);
-
-            JPanel myPanel = new JPanel();
-            myPanel.add(new JLabel("Username"));
-            myPanel.add(valueField);
-            myPanel.add(Box.createVerticalStrut(20));
-            myPanel.add(new JLabel("Password :"));
-            myPanel.add(pswField);
-
-            int result = JOptionPane.showConfirmDialog(null, myPanel,
-                    "Please Confirm with Username and Password", JOptionPane.OK_CANCEL_OPTION);
-
-            if (pswField.getText().equals("admin")) {
-                //Opense the folder    TODO
-            }
-
-        } else if (model.isCellEditable(row, colum) && (colum != 0)) {
-            //JTextField valueField = new JTextField(25);
-            JPasswordField pswField = new JPasswordField(15);
-            JDateChooser shipDate = new JDateChooser();
-            shipDate.setDateFormatString("yyyy/MM/dd");
-
-            JPanel myPanel = new JPanel();
-            myPanel.add(new JLabel("Change the Shipment Date :"));
-            myPanel.add(shipDate);
-            myPanel.add(Box.createVerticalStrut(20));
-            myPanel.add(new JLabel("Password :"));
-            myPanel.add(pswField);
-
-            int result = JOptionPane.showConfirmDialog(null, myPanel,
-                    "Pls confrim your edit with Password", JOptionPane.OK_CANCEL_OPTION);
-            if (result == 0) {
-                if (pswField.getText().equals("admin")) {
-
-                    model.setValueAt(shipDate.getDate(), row, colum);
-
-                } else {
-                    JOptionPane.showMessageDialog(null, result);
-                }
-
-            }
+        int column = source.columnAtPoint(evt.getPoint());
+        String head = model.getColumnName(column);
+        boolean edit = model.isCellEditable(row, column);
+        if (edit) {
+        UpdateLabSampling update = new UpdateLabSampling(head,username);
+        update.getdata(username,column,row,tabLab.getValueAt(row,6).toString(),tabLab.getValueAt(row,7).toString());
+        update.setVisible(true);
+        this.dispose();
         }
-
+        
+        
     }//GEN-LAST:event_tabLabMouseClicked
 
 
@@ -352,7 +329,7 @@ public class LabrotarySampeling extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LabrotarySampeling().setVisible(true);
+                new LabrotarySampeling("").setVisible(true);
             }
         });
     }
